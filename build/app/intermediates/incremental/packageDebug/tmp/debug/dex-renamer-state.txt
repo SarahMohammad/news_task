@@ -1,0 +1,4 @@
+#Fri Aug 13 02:34:25 EET 2021
+base.0=/Users/a1223/Downloads/flutter_mvvm_tutorial-master/01.news/build/app/intermediates/dex/debug/out/classes.dex
+renamed.0=classes.dex
+path.0=classes.dex
