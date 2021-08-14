@@ -1,11 +1,11 @@
 class NewsArticle {
-  final String title;
-  final String author;
-  final String description;
-  final String urlToImage;
-  final String url;
-  final String publishedAt;
-  final String content;
+   String title;
+   String author;
+   String description;
+   String urlToImage;
+   String url;
+   String publishedAt;
+   String content;
 
   NewsArticle(
       {this.title,
@@ -27,4 +27,5 @@ class NewsArticle {
       content: json['content'],
     );
   }
+
 }

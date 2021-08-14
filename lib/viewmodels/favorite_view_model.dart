@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:news/models/news_article.dart';
-import 'package:news/services/sql_database.dart';
-import 'package:news/viewmodels/news_article_view_model.dart';
+import 'package:news/services/db_helper.dart';
 
-enum LoadingStatus {
-  completed,
-  searching,
-  empty,
-}
+
 
 class FavoriteViewModel with ChangeNotifier {
-  // LoadingStatus loadingStatus = LoadingStatus.searching;
-  List<NewsArticle> articles = List<NewsArticle>();
-
+  List<NewsArticle> articles = [];
 
   List _items = [];
   List get items {
@@ -27,22 +20,28 @@ class FavoriteViewModel with ChangeNotifier {
         .map(
           (item) =>
               NewsArticle(
-
                   title : item.title,
                   description : item.description,
                   urlToImage : item.urlToImage,
                   publishedAt : item.publishedAt
-              ),
-    )
-        .toList();
-
-
+              ),).toList();
     notifyListeners();
   }
 
-  void saveArticleToDatabase(NewsArticleViewModel article) async {
+  void saveArticleToDatabase(NewsArticle article) async {
     var dbHelper = DBHelper();
     dbHelper.saveArticle(article);
+  }
+
+  doesRowExist(String title) async {
+    var dbHelper = DBHelper();
+    bool boolean = await dbHelper.doesArticleExist(title)  ;
+    return boolean;
+  }
+
+  deleteRecord(String title) async {
+    var dbHelper = DBHelper();
+    dbHelper.deleteRecord(title)  ;
   }
 }
 

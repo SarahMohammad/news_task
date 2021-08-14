@@ -1,17 +1,15 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:news/models/news_article.dart';
 import 'package:news/screens/news_article_detail_screen.dart';
 import 'package:news/viewmodels/favorite_view_model.dart';
-import 'package:news/viewmodels/news_article_view_model.dart';
-import 'package:news/widgets/circle_image.dart';
 import 'package:provider/provider.dart';
 
 class NewsList extends StatelessWidget {
-  final List<NewsArticleViewModel> articles;
+  final List<NewsArticle> articles;
 
   NewsList({this.articles});
 
-  void _showNewsArticleDetails(BuildContext context, NewsArticleViewModel vm) {
+  void _showNewsArticleDetails(BuildContext context, NewsArticle article) {
     Navigator.push(context, MaterialPageRoute(builder: (_) {
       return  MultiProvider(
         providers: [
@@ -20,7 +18,7 @@ class NewsList extends StatelessWidget {
           )
         ],
         child: NewsArticleDetailScreen(
-          article: vm,
+          article: article,
         ),
       );
     }));
@@ -41,11 +39,11 @@ class NewsList extends StatelessWidget {
               children: [
                 Container(
                     margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    child: article.imageUrl != null ?
-                    Image.network(article.imageUrl,width: MediaQuery.of(context).size.width, height: 200, ) :
-                    Container(child: SizedBox(width: 200, height: 200,) , color: Colors.amber,)
+                    child: article.urlToImage != null ?
+                    Image.network(article.urlToImage,width: MediaQuery.of(context).size.width, height: 200, ) :
+                     Image.asset('assets/images/errorimg.jpeg',width: MediaQuery.of(context).size.width,height: 200,),
 
-                ),
+        ),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   alignment: Alignment.center,
@@ -53,10 +51,11 @@ class NewsList extends StatelessWidget {
                     article.title,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
+                      fontSize: 18
                     ),
                   ),
                 ),
-                SizedBox(height: 8,),
+                SizedBox(height: 20,),
 
               ]
           )

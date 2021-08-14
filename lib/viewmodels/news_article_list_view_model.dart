@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news/models/news_article.dart';
 import 'package:news/services/web_service.dart';
-import 'package:news/viewmodels/news_article_view_model.dart';
 
 enum LoadingStatus {
   completed,
@@ -11,7 +10,7 @@ enum LoadingStatus {
 
 class NewsArticleListViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.searching;
-  List<NewsArticleViewModel> articles = List<NewsArticleViewModel>();
+  List<NewsArticle> articles = [];
 
   void searchNews(String query) async {
     this.loadingStatus = LoadingStatus.searching;
@@ -21,7 +20,13 @@ class NewsArticleListViewModel with ChangeNotifier {
         await WebService().fetchNewsSearch(query);
 
     this.articles = newsArticles
-        .map((article) => NewsArticleViewModel(article: article))
+        .map((article) => NewsArticle(title :article.title,
+        author :article.author,
+        description : article.description,
+        urlToImage : article.urlToImage,
+        url : article.url,
+        publishedAt : article.publishedAt,
+        content : article.content))
         .toList();
 
     if (this.articles.isEmpty) {
@@ -39,7 +44,13 @@ class NewsArticleListViewModel with ChangeNotifier {
     notifyListeners();
 
     this.articles = newsArticles
-        .map((article) => NewsArticleViewModel(article: article))
+        .map((article) => NewsArticle(title :article.title,
+        author :article.author,
+        description : article.description,
+        urlToImage : article.urlToImage,
+        url : article.url,
+        publishedAt : article.publishedAt,
+        content : article.content))
         .toList();
 
     if (this.articles.isEmpty) {

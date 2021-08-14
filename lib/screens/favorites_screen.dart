@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:news/viewmodels/favorite_view_model.dart';
-import 'package:news/viewmodels/news_article_view_model.dart';
-import 'package:news/widgets/circle_image.dart';
 import 'package:provider/provider.dart';
+import 'news_article_detail_screen.dart';
 
 class FavoriteScreen extends StatefulWidget {
 
@@ -13,7 +12,6 @@ class FavoriteScreen extends StatefulWidget {
 class _FavoriteScreenState extends State<FavoriteScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Provider.of<FavoriteViewModel>(context, listen: false)
         .fetchArticlesFromDatabase();
@@ -24,10 +22,6 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     var vs = Provider.of<FavoriteViewModel>(context);
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text('dd'),
-      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(left: 30, right: 20),
@@ -35,25 +29,28 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
             itemCount: vs.items.length,
             itemBuilder: (BuildContext _, int index) {
               final article = vs.items[index];
-
               return GestureDetector(
                   onTap: () {
-                    // _showNewsArticleDetails(context, article);
+                    Navigator.push(context, MaterialPageRoute(builder: (_) {
+                      return  MultiProvider(
+                        providers: [
+                          ChangeNotifierProvider(
+                            create: (_) => FavoriteViewModel(),
+                          )
+                        ],
+                        child: NewsArticleDetailScreen(
+                          article: article,
+                        ),
+                      );
+                    }),
+                    );
                   },
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Image.network(article.urlToImage),
-                        // Container(
-                        //     margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                        //     child: article.imageUrl != null ?
-                        //     Image.network(article.imageUrl,width: MediaQuery.of(context).size.width, height: 200, ) :
-                        //     Container(child: SizedBox(width: 200, height: 200,) , color: Colors.amber,)
-                        //
-                        //   // CircleImage(
-                        //   //   imageUrl: article.imageUrl,
-                        //   // ),
-                        // ),
+                        Image.network(article.urlToImage!=null ? article.urlToImage :
+                        Image.asset('assets/images/errorimg.jpeg',width: MediaQuery.of(context).size.width,height: 200,)
+                          , ),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 15),
                           alignment: Alignment.center,
@@ -61,18 +58,13 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                             article.title,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
+                              fontSize: 18
                             ),
-                            // maxLines: 1,
-                            // overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        SizedBox(height: 8,),
-
+                        SizedBox(height: 20,),
                       ]
                   )
-
-
-
               );
             },
           ),

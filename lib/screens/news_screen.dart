@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:news/viewmodels/news_article_list_view_model.dart';
-import 'package:news/widgets/app_drawer.dart';
 import 'package:news/widgets/news_list.dart';
 import 'package:provider/provider.dart';
 
@@ -17,8 +16,8 @@ class _NewsScreenState extends State<NewsScreen> {
         .topHeadlines();
   }
 
-  Widget _buildList(NewsArticleListViewModel vs) {
-    switch (vs.loadingStatus) {
+  Widget _buildList(NewsArticleListViewModel provider) {
+    switch (provider.loadingStatus) {
       case LoadingStatus.searching:
         return Center(
           child: CircularProgressIndicator(),
@@ -27,7 +26,7 @@ class _NewsScreenState extends State<NewsScreen> {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: NewsList(
-            articles: vs.articles,
+            articles: provider.articles,
           ),
         );
       case LoadingStatus.empty:
@@ -40,22 +39,17 @@ class _NewsScreenState extends State<NewsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var vs = Provider.of<NewsArticleListViewModel>(context);
+    var provider = Provider.of<NewsArticleListViewModel>(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Top Headlines"),
-      ),
+
       body: SafeArea(
         child: Column(
           children: [
              Expanded(
-              child: _buildList(vs),
+              child: _buildList(provider),
             ),
           ],
         ),
-      ),
-      drawer: Drawer(
-          child: getAppDrawer(context)
       ),
     );
   }
